@@ -1,0 +1,48 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Mortality Rate By Countries",
+  "autosize":"pad",
+  "height":150,
+  "data": {
+    "url": "./data/dataset/owid-covid-data.csv",
+    "format":{
+        "type": "csv",
+        "parse":{"date" :"date"}}
+  },
+  "transform": [{
+    "filter": {"field": "continent", "valid": false}
+  },
+  {
+    "filter": "datum.location != 'North Korea'"
+  },
+  {"aggregate": [{
+    "field": "new_deaths",
+    "op": "sum",
+    "as": "total_deaths"
+  }, {
+    "field": "new_cases",
+    "op": "sum",
+    "as": "total_cases"
+  }],
+  "groupby": ["continent", "location"]},
+  {"calculate": "datum.continent", "as": "Continent"},
+  {"calculate": "datum.location", "as": "Country"},
+  {"calculate": "datum.total_deaths/datum.total_cases", "as": "Infection Fatality Rate"}
+  ],
+  "encoding": {
+    "facet": {"field": "Continent", "type": "nominal", "columns": 6, "spacing":{"column": 0}},
+    "color": {
+      "field": "Country",
+       "type": "nominal",
+       "legend":null,
+       "scale":{"range":["#1170aa","#fc7d0b","#a3acb9","#57606c","#5fa2ce","#c85200","#7b848f","#a3cce9","#ffbc79","#c8d0d9"]}
+      },
+    "theta": {"field": "Infection Fatality Rate", "type": "quantitative", "stack":true},
+    "tooltip":[
+      {"field": "Country"},
+      {"field": "Infection Fatality Rate","format":".3f"}
+
+    ]
+  },
+  "mark": {"type": "arc", "innerRadius":30}
+}

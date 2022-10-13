@@ -1,0 +1,18 @@
+,
+        {"filter": "datum.date==year"}
+
+
+        ,
+    "params": [
+        {
+          "name": "year",
+          "value": 2019,
+          "bind": {
+            "input": "range",
+            "min": 1985,
+            "max": 2030,
+            "step": 1,
+            "name": "Year : "
+          }
+        }
+      ]
