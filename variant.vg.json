@@ -1,0 +1,55 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "title": "Distribution of Major Covid Variants",
+    "width":"container",
+    "height":"container",
+    "data": {
+      "url": "./data/dataset/covid-variants.csv",
+      "format":{
+          "type": "csv",
+          "parse":{"date" :"date"}}
+    },
+    "transform": [
+      {"joinaggregate": [{
+          "field": "num_sequences",
+          "op": "sum",
+          "as": "TotalSequences"
+      }]},
+      {"aggregate": [{
+        "field": "num_sequences",
+        "op": "sum",
+        "as": "NumSequences"
+      }],
+      "groupby": ["variant","TotalSequences"]},
+      {"calculate": "datum.NumSequences/datum.TotalSequences", "as": "Proportion of Variant"},
+      {"calculate": "datum.NumSequences/datum.TotalSequences*100", "as": "Percentage of Variant"}
+    ],
+    "encoding": {
+    "y": {"field": "variant", "type": "nominal", "sort": "-x", "title":"Major Variants"},
+    "x": {"field": "Percentage of Variant", "type": "quantitative", "title":"Percentage", "axis":{"grid": false}},
+    "color":{"value":"#55708C"}
+
+  },
+  "layer": [{
+    "mark": "bar"
+  }, {
+    "mark": {
+      "type": "text",
+      "fontWeight":"bold",
+      "align": "right",
+      "xOffset": 25,
+      "aria": false
+    },
+    "encoding": {
+      "text": {"field": "Proportion of Variant", "type": "quantitative", "format":".0%"},
+      "color": {
+        "condition": {
+          "test": {"field": "count", "gt": 10},
+          "value": "white"
+        },
+        "value": "black"
+      }
+    }
+  }]
+
+}

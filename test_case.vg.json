@@ -1,0 +1,89 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "title": "Rate of Tests Vs. Rate of New Cases Worldwide",
+    "data": {
+      "url": "./data/dataset/owid-covid-data.csv",
+      "format":{
+          "type": "csv",
+          "parse":{"date" :"date"}}
+    },
+    "transform": [
+        {
+            "filter": {"field": "continent", "valid": false}
+        },
+        {
+            "filter": "datum.location != 'North Korea'"
+        },
+        {"timeUnit":"yearmonth", "field": "date", "as": "Date"},
+        {"aggregate": [{
+          "field": "new_tests",
+          "as": "Number of Tests",
+          "op": "sum"
+        },
+        {
+          "field": "new_cases",
+          "as": "Number of Cases",
+          "op": "sum"
+        }],
+        "groupby": ["Date"]}
+    ],
+    "repeat":{
+      "layer":["Number of Tests", "Number of Cases"]
+    },
+    "spec":{
+        "width":622,
+        "height":302,
+        "encoding": {
+            "x": {"timeUnit": "yearmonth", "field": "Date", "title":"Timeline", "type": "ordinal","axis":{"labelAngle":-90}},
+            "color": {"scale":{"range":["#95B0B0", "#917467"]}}
+        },
+        "layer":[{
+            "mark": {
+            "type": "line",
+            "point": true
+         },
+        "encoding": {
+          "y": {"field": {"repeat": "layer"}, "type": "quantitative"},
+          "tooltip":[
+            {"field":"Date", "format":"%b %Y", "timeUnit":"yearmonth", "title": "Date"},
+            {"field":{"repeat": "layer"},"aggregate":"sum", "title":"Rate of Tests Per Month", "format":","}
+          ]
+        }},
+        {
+        "mark": {
+        "type": "line",
+        "point": true
+         },
+        "encoding": {
+          "y": {"field": {"repeat": "layer"}, "type": "quantitative"},
+          "tooltip":[
+            {"field":"Date", "format":"%b %Y", "timeUnit":"yearmonth", "title":"Date"},
+            {"field":{"repeat": "layer"},"aggregate":"sum", "title":"Rate of Cases Per Month", "format":","}
+          ],
+          "color":{"datum":{"repeat": "layer"}, "type": "nominal", "title":"Legend"}
+
+        }
+        },
+        {      
+          "mark"  : { 
+            "type"  : "text"  , 
+            "align"  : "left", 
+            "baseline"  :   "middle"  ,           
+            "fontSize"  :   10,
+            "dy": -150, 
+            "lineBreak":";",
+            "text":"Spike in cases most likely; due to emergence of; more infectious variant"},      
+          "encoding"  : {
+            "color"  : {  "value"  :   "black"  },        
+            "opacity"  : {
+              "condition"  : { 
+                "test"  :   "datum['Number of Cases'] == 71045444",            
+                "value"  :   1 },          
+                "value"  :   0      
+                }}}
+        ]
+        },
+        "resolve": {"scale": {"y": "independent"}}
+    
+ 
+}

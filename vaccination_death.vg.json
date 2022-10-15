@@ -1,7 +1,6 @@
 {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "title": "Rate of Vaccinations Vs. Rate of Deaths Worldwide",
-    "autosize":"pad",
     "data": {
       "url": "./data/dataset/owid-covid-data.csv",
       "format":{
@@ -15,15 +14,28 @@
         {
             "filter": "datum.location != 'North Korea'"
         },
-        {"calculate": "datum.new_vaccinations", "as": "# of Vaccinations"},
-        {"calculate": "datum.new_deaths", "as": "# of Deaths"}
+        {"timeUnit":"yearmonth", "field": "date", "as": "Date"},
+        {"aggregate": [{
+          "field": "new_vaccinations",
+          "as": "Number of Vaccinations",
+          "op": "sum"
+        },
+        {
+          "field": "new_deaths",
+          "as": "Number of Deaths",
+          "op": "sum"
+        }],
+        "groupby": ["Date"]}
     ],
     "repeat":{
-      "layer":["# of Vaccinations", "# of Deaths"]
+      "layer":["Number of Vaccinations", "Number of Deaths"]
     },
     "spec":{
+        "width":600,
+        "height":302,
       "encoding": {
-        "x": {"timeUnit": "yearmonth", "field": "date", "title":"Timeline", "type": "ordinal","axis":{"labelAngle":-90}}
+        "x": {"timeUnit": "yearmonth", "field": "Date", "title":"Timeline", "type": "ordinal","axis":{"labelAngle":-90}},
+        "color": {"scale":{"range":["#77798E", "#DE733F"]}}
       },
       "layer":[{
         "mark": {
@@ -31,9 +43,9 @@
           "point": true
          },
         "encoding": {
-          "y": {"aggregate":"sum", "field": {"repeat": "layer"}, "type": "quantitative","title":"Rate of Vaccinations Per Month"},
+          "y": {"field": {"repeat": "layer"}, "type": "quantitative"},
           "tooltip":[
-            {"field":"date", "format":"%b %Y", "timeUnit":"yearmonth", "title": "Date"},
+            {"field":"Date", "format":"%b %Y", "timeUnit":"yearmonth", "title": "Date"},
             {"field":{"repeat": "layer"},"aggregate":"sum", "title":"Rate of Vaccinations Per Month", "format":","}
           ]
         }},
@@ -43,15 +55,32 @@
         "point": true
          },
         "encoding": {
-          "y": {"aggregate":"sum", "field": {"repeat": "layer"}, "type": "quantitative","title":"Rate of Deaths Per Month"},
+          "y": {"field": {"repeat": "layer"}, "type": "quantitative"},
           "tooltip":[
-            {"field":"date", "format":"%b %Y", "timeUnit":"yearmonth", "title":"Date"},
+            {"field":"Date", "format":"%b %Y", "timeUnit":"yearmonth", "title":"Date"},
             {"field":{"repeat": "layer"},"aggregate":"sum", "title":"Rate of Deaths Per Month", "format":","}
           ],
           "color":{"datum":{"repeat": "layer"}, "type": "nominal", "title":"Legend"}
 
         }
-        }
+        },
+        {      
+        "mark"  : { 
+            "type"  : "text"  , 
+            "align"  : "left", 
+            "baseline"  :   "middle"  ,           
+            "fontSize"  :   10,
+            "dy": 120, 
+            "lineBreak":";",
+            "text":"When vaccines starts to be mass produced; and made available to the public; through governments"},      
+        "encoding"  : {
+            "color"  : {  "value"  :   "black"  },        
+            "opacity"  : {
+            "condition"  : { 
+                "test"  :   "datum['Number of Vaccinations'] == 7151504",            
+                "value"  :   1 },          
+                "value"  :   0      
+                }}}
         ]
         },
         "resolve": {"scale": {"y": "independent"}}
