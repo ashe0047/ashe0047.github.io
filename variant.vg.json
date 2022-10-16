@@ -1,4 +1,5 @@
 {
+    "config": {"view": {"stroke": "transparent"}},
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "title": "Distribution of Major Covid Variants",
     "width":"container",
@@ -26,11 +27,26 @@
     ],
     "encoding": {
     "y": {"field": "variant", "type": "nominal", "sort": "-x", "title":"Major Variants"},
-    "x": {"field": "Percentage of Variant", "type": "quantitative", "title":"Percentage", "axis":{"grid": false}},
-    "color":{"value":"#55708C"}
+    "x": {"field": "Percentage of Variant", "type": "quantitative", "title":"Percentage", "axis":{"grid": false, "labelColor":"grey"}},
+    "color":{
+      "field": "variant",
+      "type":"nominal",
+      "scale":{"range":["#2F4F4F","#3A616E","#55708C","#7F7DA2","#AD88AB","#D796A9"]},
+      "legend":{"title": "Major Variants"}
+    },
+    "opacity": {
+      "condition": {"param": "variants", "value": 1},
+      "value": 0.2}
+  
 
   },
+  
   "layer": [{
+    "params": [{
+      "name": "variants",
+      "select": {"type": "point", "fields": ["variant"]},
+      "bind":"legend"
+    }],
     "mark": "bar"
   }, {
     "mark": {
@@ -41,14 +57,7 @@
       "aria": false
     },
     "encoding": {
-      "text": {"field": "Proportion of Variant", "type": "quantitative", "format":".0%"},
-      "color": {
-        "condition": {
-          "test": {"field": "count", "gt": 10},
-          "value": "white"
-        },
-        "value": "black"
-      }
+      "text": {"field": "Proportion of Variant", "type": "quantitative", "format":".0%"}
     }
   }]
 

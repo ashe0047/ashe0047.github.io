@@ -34,7 +34,7 @@
         "width":600,
         "height":302,
       "encoding": {
-        "x": {"timeUnit": "yearmonth", "field": "Date", "title":"Timeline", "type": "ordinal","axis":{"labelAngle":-90}},
+        "x": {"timeUnit": "yearmonth", "field": "Date", "title":"Timeline", "type": "ordinal","axis":{"labelAngle":-90, "labelColor":"grey"}},
         "color": {"scale":{"range":["#77798E", "#DE733F"]}}
       },
       "layer":[{
@@ -43,7 +43,7 @@
           "point": true
          },
         "encoding": {
-          "y": {"field": {"repeat": "layer"}, "type": "quantitative"},
+          "y": {"field": {"repeat": "layer"}, "type": "quantitative", "axis":{"labelColor":"grey"}},
           "tooltip":[
             {"field":"Date", "format":"%b %Y", "timeUnit":"yearmonth", "title": "Date"},
             {"field":{"repeat": "layer"},"aggregate":"sum", "title":"Rate of Vaccinations Per Month", "format":","}
@@ -55,7 +55,7 @@
         "point": true
          },
         "encoding": {
-          "y": {"field": {"repeat": "layer"}, "type": "quantitative"},
+          "y": {"field": {"repeat": "layer"}, "type": "quantitative", "axis":{"labelColor":"grey"}},
           "tooltip":[
             {"field":"Date", "format":"%b %Y", "timeUnit":"yearmonth", "title":"Date"},
             {"field":{"repeat": "layer"},"aggregate":"sum", "title":"Rate of Deaths Per Month", "format":","}

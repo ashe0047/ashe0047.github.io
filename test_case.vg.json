@@ -34,7 +34,7 @@
         "width":622,
         "height":302,
         "encoding": {
-            "x": {"timeUnit": "yearmonth", "field": "Date", "title":"Timeline", "type": "ordinal","axis":{"labelAngle":-90}},
+            "x": {"timeUnit": "yearmonth", "field": "Date", "title":"Timeline", "type": "ordinal","axis":{"labelAngle":-90, "labelColor":"grey"}},
             "color": {"scale":{"range":["#95B0B0", "#917467"]}}
         },
         "layer":[{
@@ -43,7 +43,7 @@
             "point": true
          },
         "encoding": {
-          "y": {"field": {"repeat": "layer"}, "type": "quantitative"},
+          "y": {"field": {"repeat": "layer"}, "type": "quantitative", "axis":{"labelColor":"grey"}},
           "tooltip":[
             {"field":"Date", "format":"%b %Y", "timeUnit":"yearmonth", "title": "Date"},
             {"field":{"repeat": "layer"},"aggregate":"sum", "title":"Rate of Tests Per Month", "format":","}
@@ -55,7 +55,7 @@
         "point": true
          },
         "encoding": {
-          "y": {"field": {"repeat": "layer"}, "type": "quantitative"},
+          "y": {"field": {"repeat": "layer"}, "type": "quantitative", "axis":{"labelColor":"grey"}},
           "tooltip":[
             {"field":"Date", "format":"%b %Y", "timeUnit":"yearmonth", "title":"Date"},
             {"field":{"repeat": "layer"},"aggregate":"sum", "title":"Rate of Cases Per Month", "format":","}
